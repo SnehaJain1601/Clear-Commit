@@ -1,0 +1,51 @@
+.app-page button {
+  font: inherit;
+  transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+.app-page button:hover:not(:disabled) {
+  border-color: #8b949e;
+}
+
+.app-page button:focus-visible,
+.app-page textarea:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+.app-page button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app-page textarea::placeholder {
+  color: #6e7681;
+}
+
+@media (max-width: 760px) {
+  .app-page {
+    padding: 16px 14px 32px !important;
+  }
+
+  .app-main {
+    grid-template-columns: 1fr !important;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .outputMessage {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .actionRow {
+    justify-content: stretch !important;
+  }
+
+  .generateButton {
+    width: 100%;
+  }
+}
