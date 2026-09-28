@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { rateLimit } from 'express-rate-limit';
 import { GoogleGenAI } from '@google/genai';
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
@@ -13,6 +14,22 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
 
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
+
+const apiRateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 3,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  handler: (req, res) => {
+    res.set('Retry-After', '60');
+    res.status(429).json({
+      error: 'Rate limit exceeded. Please try again in one minute.',
+      retryAfterSeconds: 60
+    });
+  }
+});
+
+app.use('/api', apiRateLimiter);
 
 async function generateWithGemini(diffText) {
   if (!GEMINI_API_KEY) {
